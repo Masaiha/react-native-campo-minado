@@ -1,33 +1,10 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
 import React, { Component } from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-} from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-import Field from './src/components/Field';
-import Flag from './src/components/Flag';
 import MineField from './src/components/MineField';
-import { createMinedBoard } from './src/functions';
+import { createMinedBoard, cloneBoard, openField, hadExplosion, wonGame, showMines, invertFlag, flagsUsed } from './src/functions';
 import params from './src/params';
+import Header from './src/components/Header';
 
 export default class App extends Component {
 
@@ -48,17 +25,52 @@ export default class App extends Component {
     
     return{
       board: createMinedBoard(rows, cols, this.minesAmount()),
+      won: false,
+      lost: false
     }
+  }
+
+  onOpenField =(row, column) => {
+    const board = cloneBoard(this.state.board);
+    openField(board, row, column);
+    const lost = hadExplosion(board);
+    const won = wonGame(board); 
+
+    if(lost){
+      showMines(board);
+      Alert.alert('Perdeu!!')
+    }
+
+    if(won){
+      Alert.alert("Ganhou!!!")
+    }
+
+    this.setState({ board, lost, won })
+  }
+
+  onSelectField =(row, column) => {
+    const board = this.state.board;
+    invertFlag(board, row, column)
+
+    const won = wonGame(board)
+
+    if(won){
+      Alert.alert("Ganhou!!!")
+    }
+
+    this.setState({ board, won })
+
   }
 
   render(){
     return(
     <View style={styles.container}>
-      <Text>Iniciando O Jogo</Text>
-      <Text>Tamanho da grade: {
-            params.getRowsAmount() +"x"+ params.getColumnsAmount()}</Text>
+      <Header flagLeft={this.minesAmount() - flagsUsed(this.state.board)} 
+              onNewGame={() => this.setState(this.createState())}/>
       <View style={styles.board}>
-        <MineField board={this.state.board} />
+        <MineField board={this.state.board}
+                   onOpenField={this.onOpenField} 
+                   onSelectField={this.onSelectField}/>
       </View>
     </View>
     )};
@@ -67,12 +79,9 @@ export default class App extends Component {
 const styles = StyleSheet.create({
   container:{
     flex: 1,
-    justifyContent: 'flex-end',
-    // alignItems: 'center',
-    // backgroundColor: '#F5FCFF'
+    justifyContent: 'flex-end'
   },
   board: {
-    // alignItems: 'center',
     backgroundColor: '#AAA'
   }
 });
