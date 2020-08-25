@@ -5,7 +5,8 @@ import bandeira from '../../wwwroot/imagens/bandeira.png';
 export default props => {
     return (
         <View>
-            <Image source={bandeira} style={[styles.img, props.bigger ? styles.imgBigger : null]}/>
+            <Image source={bandeira} 
+                   style={[styles.img, props.bigger ? styles.imgBigger : null]}/>
         </View>
     )
 }
@@ -14,11 +15,9 @@ const styles = StyleSheet.create({
     img: {
         width: 20,
         height: 20,
-        //backgroundColor: '#999',
     },
     imgBigger: {
         width: 30,
         height: 30,
-        //backgroundColor: '#999',
     }
 })

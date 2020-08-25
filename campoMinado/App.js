@@ -6,6 +6,7 @@ import { createMinedBoard, cloneBoard, openField, hadExplosion, wonGame, showMin
 import params from './src/params';
 import Header from './src/components/Header';
 import LevelSelection from './src/screens/LevelSelection';
+import FeedbackFinal from './src/screens/FeedbackFinal';
 
 export default class App extends Component {
 
@@ -29,6 +30,7 @@ export default class App extends Component {
       won: false,
       lost: false,
       showLevelSelection: false,
+      showFeedback: false
     }
   }
 
@@ -37,31 +39,22 @@ export default class App extends Component {
     openField(board, row, column);
     const lost = hadExplosion(board);
     const won = wonGame(board); 
+    const finished = hadExplosion(board) || wonGame(board)
 
-    if(lost){
-      showMines(board);
-      Alert.alert('Perdeu!!')
-    }
+    if(lost) showMines(board);
+    if(finished) this.setState({showFeedback: true})
 
-    if(won){
-      Alert.alert("Ganhou!!!")
-    }
-
-    this.setState({ board, lost, won })
+    this.setState({ board, lost, won, finished })
   }
 
   onSelectField =(row, column) => {
     const board = this.state.board;
-    invertFlag(board, row, column)
+    invertFlag(board, row, column);
+    const finished = hadExplosion(board) || wonGame(board)
 
-    const won = wonGame(board)
+    if(finished) this.setState({showFeedback: true})
 
-    if(won){
-      Alert.alert("Ganhou!!!")
-    }
-
-    this.setState({ board, won })
-
+    this.setState({ board, finished })
   }
 
   onLevelSelected = level => {
@@ -69,10 +62,18 @@ export default class App extends Component {
     this.setState(this.createState())
   }
 
+  onCancelFeedback = (showFeedback) => {
+    this.setState({ showFeedback })
+  }
+
   render(){
     return(
     <View style={styles.container}>
-      <Text>sadfds</Text>
+      <FeedbackFinal lost={this.state.lost && this.state.finished} 
+                     isVisible={this.state.showFeedback} 
+                     onCancel={() => this.setState({ showFeedback: false })}
+                     onCancelFeedback={() => this.onCancelFeedback()}
+                     />
       <LevelSelection isVisible={this.state.showLevelSelection}
                       onLevelSelected={this.onLevelSelected}
                       onCancel={() => this.setState({ showLevelSelection: false })} />

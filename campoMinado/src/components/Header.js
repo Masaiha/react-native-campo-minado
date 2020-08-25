@@ -9,7 +9,7 @@ export default props => {
                 <TouchableOpacity onPress={props.onFlagPress} style={styles.flagButton}>
                 <Flag bigger/>
                 </TouchableOpacity>
-                <Text style={styles.flagLeft}>{props.flagLeft}</Text>
+                <Text style={styles.flagLeft}>{props.flagLeft} Minas</Text>
             </View>
             <TouchableOpacity style={styles.button} onPress={props.onNewGame}>
                 <Text style={styles.buttonLabel}>Novo Jogo</Text>
@@ -42,8 +42,9 @@ const styles = StyleSheet.create({
         marginLeft: 20
     },
     button:{
-        backgroundColor: '#999',
-        padding: 5
+        backgroundColor: '#2196F3',
+        padding: 10,
+        borderRadius: 10
     },
     buttonLabel: {
         fontSize: 20,

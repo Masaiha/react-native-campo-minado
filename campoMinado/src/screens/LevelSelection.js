@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, Text, TouchableOpacity, Modal } from 'react-native';
+import params from '../params';
 
 export default props => {
     return(
@@ -10,18 +11,18 @@ export default props => {
 
             <View style={styles.frame}>
                 <View style={styles.container}>
-                    <Text style={styles.title}>Selecione o Nível</Text>
+                    <Text style={styles.title}>Selecione um Nível</Text>
                     <TouchableOpacity style={[styles.button, styles.bgEasy]} 
                                       onPress={() => props.onLevelSelected(0.1)}>
                         <Text style={styles.buttonLabel}>Fácil</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={[styles.button, styles.bgNormal]} 
                                       onPress={() => props.onLevelSelected(0.2)}>
-                        <Text style={styles.buttonLevel}>Intermediário</Text>
+                        <Text style={styles.buttonLabel}>Intermediário</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={[styles.button, styles.bgHard]} 
                                       onPress={() => props.onLevelSelected(0.3)}>
-                        <Text style={styles.buttonLevel}>Difícil</Text>
+                        <Text style={styles.buttonLabel}>Difícil</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -48,7 +49,11 @@ const styles = StyleSheet.create({
     },
     button:{
         marginTop: 10,
-        padding: 5
+        padding: 5,
+        width: params.getRowsAmount()*10,
+        justifyContent: 'center',
+        alignItems: 'center'
+
     },
     buttonLabel: {
         fontSize: 20,
@@ -57,7 +62,8 @@ const styles = StyleSheet.create({
     },  
     bgEasy:{
         backgroundColor: '#49b65d',
-    },bgNormal:{
+    },
+    bgNormal:{
         backgroundColor: '#2765F7',
     },
     bgHard:{
